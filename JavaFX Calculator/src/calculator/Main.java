@@ -167,6 +167,15 @@ public class Main extends Application {
 			case "=":
 				setActionEquals(b);
 				break;
+			case "+/-":
+				setActionPlusMinus(b);
+				break;
+			case "%":
+				setActionPercent(b);
+				break;
+			case "CE":
+				setActionHardClear(b);
+				break;
 		}
 	}
 	
@@ -254,7 +263,7 @@ public class Main extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				Calculator.reset();
+				Calculator.clear();
 				updateDisplay();
 			}
 		});
@@ -301,6 +310,44 @@ public class Main extends Application {
 					default:														// Default only here for compiler's happiness
 						break;
 				}
+			}
+		});
+	}
+	
+	public void setActionPlusMinus(Button b) {
+		b.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Calculator.changeSign();
+				updateDisplay();
+			}
+		});
+	}
+	
+	public void setActionPercent(Button b) {
+		b.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					double amount = Calculator.getLastInput();
+					double result = Calculator.percent(Calculator.value, amount);		// Current percentage value is in calculator's display
+					Calculator.storeInput(amount);										// Puts the previous input back into storage for use in the operation
+					Calculator.setValue(result);
+				}
+				catch(IndexOutOfBoundsException e) {
+					Calculator.setValue(0);												// Either caused by no previous input or no number 
+				}																		// entered before pressing the '%' button. Should continue current expression line
+				updateDisplay();
+			}
+		});
+	}
+	
+	public void setActionHardClear(Button b) {
+		b.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Calculator.reset();
+				updateDisplay();
 			}
 		});
 	}

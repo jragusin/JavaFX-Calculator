@@ -33,10 +33,15 @@ public abstract class Calculator {
 	 * operation has been set. Used to determine which other 
 	 * number is to be used in the selected operation.
 	 */
-	public static double getLastInput() {
-		double last = inputs.get(0);
-		inputs.remove(0);									// Remove the last input from history
-		return last;
+	public static double getLastInput() throws IndexOutOfBoundsException {
+		if(inputs.size() > 0) {
+			double last = inputs.get(0);
+			inputs.remove(0);									// Remove the last input from history
+			return last;
+		}
+		else {
+			throw new IndexOutOfBoundsException();
+		}
 	}
 	
 	/**
@@ -84,5 +89,17 @@ public abstract class Calculator {
 	 */
 	public static double getValue() {
 		return value;
+	}
+	
+	public static void changeSign() {
+		value = value * (-1);
+	}
+	
+	public static void clear() {
+		value = 0;
+	}
+	
+	public static double percent(double percentage, double value) {
+		return (value) * (percentage/100);
 	}
 }
