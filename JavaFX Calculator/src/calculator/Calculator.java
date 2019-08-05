@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * by a calculator. Is mainly used to hold and process the 
  * calculator's value and its display.
 */
-public abstract class Calculator {
+public class Calculator {
 	public static double value;
 	public static String display;
 	public static ArrayList<Double> inputs = new ArrayList<Double>();		// Used to store previous inputs
@@ -91,15 +91,31 @@ public abstract class Calculator {
 		return value;
 	}
 	
+	/**
+	 * changeSign:
+	 * Changes the sign of the current value from positive to negative
+	 * or vice versa.
+	 */
 	public static void changeSign() {
 		value = value * (-1);
 	}
 	
+	/**
+	 * clear():
+	 * performs a soft reset by clearing the display back to "0".
+	 */
 	public static void clear() {
 		value = 0;
 	}
 	
-	public static double percent(double percentage, double value) {
-		return (value) * (percentage/100);
+	/**
+	 * percent:
+	 * @param double p
+	 * @param double value
+	 * @return a double corresponding to the percentage of value
+	 * as specified by p.
+	 */
+	public static double percent(double p, double value) {
+		return (value) * (p/100);
 	}
 }

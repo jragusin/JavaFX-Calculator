@@ -255,8 +255,9 @@ public class Main extends Application {
 	/**
 	 * setActionClear
 	 * @param Button b
-	 * Utilized by the C Button. Performs a hard reset on the calculator. This clears the 
-	 * calculator's history of previous inputs, and reset the display to the default value. 
+	 * Utilized by the "C" Button. Performs a soft reset on the calculator.
+	 * The current display is set to "0" but the current expression will continue to 
+	 * be processed. This method does not delete previous inputs from storage.
 	 */
 	public void setActionClear(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
@@ -314,6 +315,13 @@ public class Main extends Application {
 		});
 	}
 	
+	/**
+	 * setActionPlusMinus:
+	 * @param Buton b
+	 * Sets the action for the "+/-" button. Used to change the sign of the current display 
+	 * either from positive to negative or vice verse. Calls a sign change method in 
+	 * Calculator.java.
+	 */
 	public void setActionPlusMinus(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -324,6 +332,14 @@ public class Main extends Application {
 		});
 	}
 	
+	/**
+	 * setActionPercent:
+	 * @param Button b
+	 * Sets the action for the "%" button. Is used to perform the 4 basic functions
+	 * with percentages of the previous input. For example, the input
+	 * "4 + 50%" will simplify to "4 + 2" which will produce "6" as a result.
+	 * If "%" is pressed when there is no previous input, then "0" will display.
+	 */
 	public void setActionPercent(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -342,6 +358,12 @@ public class Main extends Application {
 		});
 	}
 	
+	/**
+	 * setActionHardClear:
+	 * @param Button b
+	 * Sets the action for the "CE" button. When pressed will perform
+	 * a hard clear and erase all stored inputs.
+	 */
 	public void setActionHardClear(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -402,7 +424,7 @@ public class Main extends Application {
 	}
 	
 	/**
-	 * isNUmeric
+	 * isNUmeric:
 	 * @param String s
 	 * @return true if the String is a numeric value, false
 	 * otherwise. Used to determine if a button is numeric
