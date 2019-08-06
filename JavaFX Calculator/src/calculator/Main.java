@@ -30,14 +30,16 @@ import calculator.Calculator;
 public class Main extends Application {
 	
 	private final String[][] buttonTemplate = {
-			{ "+/-", "%", "CE", "C" },
-			{ "7", "8", "9", "/" },
-			{ "4", "5", "6", "*" },
-			{ "1", "2", "3", "-" },
-			{ "0", ".", "=", "+" }
+			{ "exp", "+/-", "%", "CE", "C" },
+			{ "ln", "7", "8", "9", "/" },
+			{ "sin", "4", "5", "6", "*" },
+			{ "cos", "1", "2", "3", "-" },
+			{ "tan", "0", ".", "=", "+" }
 	};
 	
 	private TextField screen;
+	
+	private enum TrigOps {SIN, COS, TAN, EXP, LN };								// Contains all trig operations 
 	
 	private enum Operations { ADD, SUBTRACT, MULTIPLY, DIVIDE, NONE };			// Contains all operations this   
 																				// calculator can perform
@@ -175,6 +177,21 @@ public class Main extends Application {
 				break;
 			case "CE":
 				setActionHardClear(b);
+				break;
+			case "exp":
+				setActionTrig(b, TrigOps.EXP);
+				break;
+			case "ln":
+				setActionTrig(b, TrigOps.LN);
+				break;
+			case "sin":
+				setActionTrig(b, TrigOps.SIN);
+				break;
+			case "cos":
+				setActionTrig(b, TrigOps.COS);
+				break;
+			case "tan":
+				setActionTrig(b, TrigOps.TAN);
 				break;
 		}
 	}
@@ -400,6 +417,73 @@ public class Main extends Application {
 				updateDisplay();												
 			}
 		});
+	}
+	
+	/**
+	 * setActionTrig:
+	 * @param Button b
+	 * @param TrigOps o
+	 * Initializes an ActionEvent for all of the buttons associated with trigonometry.
+	 * The specific functionality of each Action Event is determined by the TrigOps 
+	 * that was passed into the method. Based on the TrigOps o, each button is initialized. 
+	 */
+	public void setActionTrig(Button b, TrigOps o) {
+		switch(o) {
+			case SIN:
+				b.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						double sin = Math.sin(Calculator.value);
+						Calculator.setValue(sin);					// Each case sets the Calculator's display
+						updateDisplay();							// and updates the display to reflect the new calculation
+					}
+				});
+				break;
+				
+			case COS:
+				b.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						double cos = Math.cos(Calculator.value);
+						Calculator.setValue(cos);
+						updateDisplay();
+					}
+				});
+				break;
+				
+			case TAN:
+				b.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						double tan = Math.tan(Calculator.value);
+						Calculator.setValue(tan);
+						updateDisplay();
+					}
+				});
+				break;
+				
+			case EXP:
+				b.setOnAction(new EventHandler<ActionEvent>(){
+					@Override
+					public void handle(ActionEvent event) {
+						double exp = Math.exp(Calculator.value);
+						Calculator.setValue(exp);
+						updateDisplay();
+					}
+				});
+				break;
+				
+			case LN:
+				b.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+							double ln = Math.log(Calculator.value);
+							Calculator.setValue(ln);
+							updateDisplay();
+					}
+				});
+				break;
+		}
 	}
 	
 	/**
