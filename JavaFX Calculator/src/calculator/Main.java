@@ -21,7 +21,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -46,6 +50,9 @@ public class Main extends Application {
 	
 	private static Operations op = Operations.NONE;								// The current operation being processes
 																				// Default is NONE
+	private boolean radians = true;												// Used to determine the angle measurement 
+																				// for the trig functions. Default is in radians
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -75,8 +82,34 @@ public class Main extends Application {
 	public VBox createLayout(TextField screen, TilePane buttons, Stage primaryStage) {
 		VBox layout = new VBox(20);
 		layout.setAlignment(Pos.CENTER);
-		layout.getChildren().addAll(screen, buttons);
 		layout.setFillWidth(false);													// Reverting this to true messes with button positioning
+		
+		MenuBar menuBar = new MenuBar();
+		Menu angle = new Menu("Angle");
+		
+		RadioMenuItem deg = new RadioMenuItem("Degrees");
+		deg.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				radians = false;
+			}
+		});
+		
+		RadioMenuItem rad = new RadioMenuItem("Radians");
+		rad.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				radians = true;
+			}
+		});
+		
+		ToggleGroup toggleGroup = new ToggleGroup();
+		toggleGroup.getToggles().addAll(deg, rad);
+		
+		angle.getItems().addAll(deg, rad);
+		menuBar.getMenus().add(angle);
+		
+		layout.getChildren().addAll(menuBar, screen, buttons);
 		return layout;
 	}
 	
@@ -203,7 +236,7 @@ public class Main extends Application {
 	 * , stores the current calculator's displayed value, and clears the screen
 	 * to its default setting (0).
 	 */
-	public void setActionAddition(Button b) {
+	private void setActionAddition(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -221,7 +254,7 @@ public class Main extends Application {
 	 * Utilized by the Subtraction button. Sets the class' operation, stores the
 	 * current displayed value, and clears screen to the default value.
 	 */
-	public void setActionSubtraction(Button b) {
+	private void setActionSubtraction(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -239,7 +272,7 @@ public class Main extends Application {
 	 * Utilized by the Multiplication button. Sets the class' operation, stores the 
 	 * current displayed value, and resets the screen to its default value.
 	 */
-	public void setActionMultiply(Button b) {
+	private void setActionMultiply(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -257,7 +290,7 @@ public class Main extends Application {
 	 * Utilized by the Divide button. Sets the class' operation, stores the current
 	 * displayed value, and resets the screen to the default value.
 	 */
-	public void setActionDivide(Button b) {
+	private void setActionDivide(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -276,7 +309,7 @@ public class Main extends Application {
 	 * The current display is set to "0" but the current expression will continue to 
 	 * be processed. This method does not delete previous inputs from storage.
 	 */
-	public void setActionClear(Button b) {
+	private void setActionClear(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -294,7 +327,7 @@ public class Main extends Application {
 	 * calculator's display depending on the class' current operation.
 	 * Also updates the display to show the answer to the operation.
 	 */
-	public void setActionEquals(Button b) {
+	private void setActionEquals(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -339,7 +372,7 @@ public class Main extends Application {
 	 * either from positive to negative or vice verse. Calls a sign change method in 
 	 * Calculator.java.
 	 */
-	public void setActionPlusMinus(Button b) {
+	private void setActionPlusMinus(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -357,7 +390,7 @@ public class Main extends Application {
 	 * "4 + 50%" will simplify to "4 + 2" which will produce "6" as a result.
 	 * If "%" is pressed when there is no previous input, then "0" will display.
 	 */
-	public void setActionPercent(Button b) {
+	private void setActionPercent(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -381,7 +414,7 @@ public class Main extends Application {
 	 * Sets the action for the "CE" button. When pressed will perform
 	 * a hard clear and erase all stored inputs.
 	 */
-	public void setActionHardClear(Button b) {
+	private void setActionHardClear(Button b) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -398,7 +431,7 @@ public class Main extends Application {
 	 * Sets the ActionEvent for all numeric buttons. Updates the display accordingly
 	 * depending on which numeric button was selected.
 	 */
-	public void setActionNumeric(Button b, String s) {
+	private void setActionNumeric(Button b, String s) {
 		b.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -427,13 +460,19 @@ public class Main extends Application {
 	 * The specific functionality of each Action Event is determined by the TrigOps 
 	 * that was passed into the method. Based on the TrigOps o, each button is initialized. 
 	 */
-	public void setActionTrig(Button b, TrigOps o) {
+	private void setActionTrig(Button b, TrigOps o) {
 		switch(o) {
 			case SIN:
 				b.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						double sin = Math.sin(Calculator.value);
+						double sin = 0;
+						if(radians) {
+							sin = Math.sin(Calculator.value);
+						}
+						else {
+							sin = Math.sin(Math.toDegrees(Calculator.value));
+						}
 						Calculator.setValue(sin);					// Each case sets the Calculator's display
 						updateDisplay();							// and updates the display to reflect the new calculation
 					}
@@ -444,7 +483,13 @@ public class Main extends Application {
 				b.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						double cos = Math.cos(Calculator.value);
+						double cos = 0;
+						if(radians) {
+							cos = Math.cos(Calculator.value);
+						}
+						else {
+							cos = Math.acos(Math.toDegrees(Calculator.value));
+						}
 						Calculator.setValue(cos);
 						updateDisplay();
 					}
@@ -455,7 +500,13 @@ public class Main extends Application {
 				b.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						double tan = Math.tan(Calculator.value);
+						double tan = 0;
+						if(radians) {
+							tan = Math.tan(Calculator.value);
+						}
+						else {
+							tan = Math.tan(Math.toDegrees(Calculator.value));
+						}
 						Calculator.setValue(tan);
 						updateDisplay();
 					}
@@ -493,7 +544,7 @@ public class Main extends Application {
 	 * Only used when the display has changed due to new inputs
 	 * or a calculation.
 	 */
-	public void updateDisplay() {
+	private void updateDisplay() {
 		this.screen.setText(Calculator.getDisplay());
 	}
 	

@@ -118,4 +118,5 @@ public class Calculator {
 	public static double percent(double p, double value) {
 		return (value) * (p/100);
 	}
+	
 }
